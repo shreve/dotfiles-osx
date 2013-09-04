@@ -1,0 +1,19 @@
+let &runtimepath = printf('%s/dotfiles/vim,%s,%s/dotfiles/vim/after', $HOME, $VIMRUNTIME, $HOME)
+
+call pathogen#infect()
+
+set wildmenu
+set wildmode=longest:full,full
+
+syntax on
+colorscheme Tomorrow-Night-Bright
+"luna-term  Tomorrow-Night-Bright
+set noexpandtab
+set tabstop=4
+set shiftwidth=4
+set autoindent
+set softtabstop=0
+set cdpath=/Users/shreve/,/Users/shreve/sites/
+set number
+
+autocmd BufRead,BufNewFile *.html.erb set filetype=eruby.html

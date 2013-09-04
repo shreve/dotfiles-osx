@@ -1,0 +1,12 @@
+[user]
+	name = Jacob Evan Shreve
+	email = jacob@shreve.ly
+[core]
+	quotepath = false
+	excludesfile = /Users/shreve/.gitignore
+[push]
+	default = matching
+[diff]
+	tool = vimdiff
+[merge]
+	tool = vimdiff

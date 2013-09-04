@@ -1,0 +1,45 @@
+#!/usr/bin/ruby
+
+which = ARGV[0]
+results = {}
+
+if which =~ /^(l|r)/ or which.nil?
+	# Local or Router deduced pretty much the same way
+	text = `ipconfig getpacket en0`
+	if text.length == 0
+		text = `ipconfig getpacket en1`
+		if text.length == 0
+			puts "There's nothing I can do for you, son."
+			return
+		end
+	end
+	data = text.match('^yiaddr = ([\d\.]*)$')
+	results['local'] = data[1]
+	data = text.match('^server_identifier \(ip\): ([\d\.]*)$')
+	results['router'] = data[1]
+end
+
+if which =~ /^e/ or which.nil?
+	results['external'] = `curl -s --connect-timeout 2  --max-time 2 ipecho.net/plain`
+	if results['external'].empty?
+		results['external'] = 'are you sure you\'re connected?'
+	end
+end
+
+
+
+val = case which
+when /^l/
+	results['local']
+when /^r/
+	results['router']
+when /^e/
+	results['external']
+else
+	"local: #{results['local']}
+router: #{results['router']}
+external: #{results['external']}"
+end
+
+puts val
+`echo '#{val}' | tr '\n' ' ' | pbcopy` unless which.nil?
