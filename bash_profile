@@ -107,8 +107,13 @@ brew-updater() {
 }
 
 yiic() {
-	#cat "$DOTPATH/data-for/yiic" | grep `pwd`
-	find . -name 'yiic' -exec {} "$@" \;
+	YIICPATH=$DOTPATH/data-for/yiic
+	YIIC=`grep -i $PWD $YIICPATH`
+	if [ ! -e "$YIIC" ]; then
+		YIIC=$PWD/`find . -name 'yiic'`
+		echo "$YIIC" | tee -a $YIIPATH
+	fi
+	$YIIC "$@"
 }
 
 #
