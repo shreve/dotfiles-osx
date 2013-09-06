@@ -69,17 +69,25 @@ cmake() { rm -f "$1"; make "$1"; ./"$1"; }
 # 4. Opens it
 # 5. Sets up the logging
 addToPow() {
-  echo "adding ~/sites/$1/ to pow server"
-  ln -s ~/sites/$1/ ~/.pow/$1
-  cd ~/sites/$1/
-  echo "symlinking pow logs"
-  ln -s ~/Library/Logs/Pow/apps/$1.log log/pow.log
-  echo "running bundle install"
-  bundle install
-  echo "opening."
-  open "http://$1.dev/"
-  echo "Running Logs"
-  tail -f log/pow.log
+	if [[  -n "$1" ]]; then
+		echo "adding ~/sites/$1/ to pow server"
+		ln -s ~/sites/$1/ ~/.pow/$1
+		cd ~/sites/$1/
+		echo "symlinking pow logs"
+		LOGPATH="~/Library/Logs/Pow/apps/$1.log"
+		if [[ ! -e $LOGPATH ]]; then
+				touch $LOGPATH
+		fi
+		ln -s $LOGPATH log/pow.log
+		echo "running bundle install"
+		bundle install
+		echo "opening."
+		open "http://$1.dev/"
+		echo "Running Logs"
+		tail -f log/pow.log
+	else
+		echo "\`addToPow site\` where site is in ~/Sites/"
+	fi
 }
 
 # touches restart.txt if it already exists to restart pow.
