@@ -70,7 +70,7 @@ cmake() { rm -f "$1"; make "$1"; ./"$1"; }
 # 5. Sets up the logging
 addToPow() {
 	if [[  -n "$1" ]]; then
-		echo "adding ~/sites/$1/ to pow server"
+		echo "adding ~/sites/$1/ to pow"
 		ln -s ~/sites/$1/ ~/.pow/$1
 		cd ~/sites/$1/
 		echo "symlinking pow logs"

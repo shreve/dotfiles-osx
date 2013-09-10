@@ -2,4 +2,4 @@ private
 *.swp
 .DS_Store
 vim/bundle/*
-data-for
+data-for/*

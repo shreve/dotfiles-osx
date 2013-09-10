@@ -6,8 +6,7 @@ set wildmenu
 set wildmode=longest:full,full
 
 syntax on
-colorscheme Tomorrow-Night-Bright
-"luna-term  Tomorrow-Night-Bright
+colorscheme luna-term " Tomorrow-Night-Bright
 set noexpandtab
 set tabstop=4
 set shiftwidth=4
