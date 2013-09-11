@@ -151,10 +151,7 @@ revert-file() {
 # then run git gc, but don't tell me how it goes
 garbage-collect() {
     if [[ "`pwd`" != "$HOME" ]]; then
-        echo 'Not home'
 		find . -name '.DS_Store' -exec rm {} \;
-	else
-		echo 'Home!'
 	fi
     #find . -name '*.swp' -exec rm {} \;
     if [ -d ./.git ]; then
