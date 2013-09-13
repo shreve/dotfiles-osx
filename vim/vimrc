@@ -1,18 +1,41 @@
+" Include $DOTPATH in vim's runtime
 let &runtimepath = printf('%s/dotfiles/vim,%s,%s/dotfiles/vim/after', $HOME, $VIMRUNTIME, $HOME)
 
+" Shout out to Tpope!
 call pathogen#infect()
 
+" Turn on the autocomplete menue thingy
 set wildmenu
 set wildmode=longest:full,full
 
+" Theming and shit like that
 syntax on
 colorscheme luna-term " Tomorrow-Night-Bright
+
+" I'm pretty picky about tabs
 set noexpandtab
 set tabstop=4
 set shiftwidth=4
 set autoindent
 set softtabstop=0
+
+" I don't really use :cd, but whatevs
 set cdpath=/Users/shreve/,/Users/shreve/sites/
+
+" Turn on line numbers
 set number
 
+" Turn on ruler
+set ruler
+
+" Show cmd
+set showcmd
+
+" 2 lines of padding
+set scrolloff=2
+
+" syntax highlighting for .html.erb
 autocmd BufRead,BufNewFile *.html.erb set filetype=eruby.html
+
+" Keep temporary and backup files in ~/.vim
+set directory=$DOTPATH/vim/tmp
