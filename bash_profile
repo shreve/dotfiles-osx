@@ -155,7 +155,7 @@ garbage-collect() {
 	fi
     #find . -name '*.swp' -exec rm {} \;
     if [ -d ./.git ]; then
-        git gc >/dev/null
+        git gc --aggressive --prune=now >/dev/null
     fi
 }
 
@@ -164,4 +164,12 @@ stage-all() {
 	garbage-collect
 	git add .
 	git status
+}
+
+pssh() {
+	echo "pssh! you think this works yet? LOL"
+	#spawn ssh $1 -l $2
+	#expect "password"
+	#send $3;
+	#interact
 }
