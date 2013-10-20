@@ -1,6 +1,2 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =4
-let g:netrw_dirhist_1='/Users/shreve/.vim/bundle/vim-sensible'
-let g:netrw_dirhist_2='/Users/shreve/.vim/bundle/vim-sensible/plugin'
-let g:netrw_dirhist_3='/Users/shreve/Projects'
-let g:netrw_dirhist_4='/Users/shreve/Projects/Matts-Zany-LSD-Adventure'
+let g:netrw_dirhist_cnt =0
