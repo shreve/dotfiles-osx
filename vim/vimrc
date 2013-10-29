@@ -11,7 +11,6 @@ set wildmode=longest:full,full
 " Theming and shit like that
 syntax on
 colorscheme Tomorrow-Night-Bright
-"luna-term 
 
 " I'm pretty picky about tabs
 set noexpandtab
@@ -19,6 +18,7 @@ set tabstop=4
 set shiftwidth=4
 set autoindent
 set softtabstop=0
+set backspace=2
 
 " I don't really use :cd, but whatevs
 set cdpath=/Users/shreve/,/Users/shreve/sites/
