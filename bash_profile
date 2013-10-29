@@ -15,6 +15,7 @@ export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/sbin:/usr/l
 export EDITOR="vim"
 export PS1="\W$ "
 export DOTPATH="/Users/shreve/dotfiles"
+export CLICOLOR=1
 
 
 #/////////////////////////////
@@ -37,6 +38,7 @@ alias tunnel="pagoda tunnel db1 -a"
 alias apache="sudo apachectl" # apache (restart|status|start|stop)
 alias bx="bundle exec"
 alias rm-ds="find . -name '.DS_Store' -depth -exec rm {} \;"
+alias ls="ls -GFh"
 
 # Files I edit often enough to neccessitate shortcuts
 alias pass="vim /private/pwd"
@@ -153,7 +155,7 @@ garbage-collect() {
     if [[ "`pwd`" != "$HOME" ]]; then
 		find . -name '.DS_Store' -exec rm {} \;
 	fi
-    #find . -name '*.swp' -exec rm {} \;
+    find . -name '*.swp' -exec rm {} \;
     if [ -d ./.git ]; then
         git gc --aggressive --prune=now >/dev/null
     fi
