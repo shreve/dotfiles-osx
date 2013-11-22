@@ -42,4 +42,4 @@ external: #{results['external']}"
 end
 
 puts val
-`echo '#{val}' | tr '\n' ' ' | pbcopy` unless which.nil?
+#`echo '#{val}' | tr '\n' ' ' | pbcopy` unless which.nil?
