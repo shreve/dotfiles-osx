@@ -1,42 +1,102 @@
-" Include $DOTPATH in vim's runtime
-let &runtimepath = printf('%s/dotfiles/vim,%s,%s/dotfiles/vim/after', $HOME, $VIMRUNTIME, $HOME)
+let &rtp = printf('%s/dotfiles/vim,%s,%s/dotfiles/vim/after', $HOME, $VIMRUNTIME, $HOME) " include $DOTPATH
 
-" Shout out to Tpope!
-call pathogen#infect()
+call pathogen#infect() " Shout out to Tpope!
 
-" Turn on the autocomplete menue thingy
-set wildmenu
-set wildmode=longest:full,full
+let mapleader="," " <Leader> = ,
 
 " Theming and shit like that
 syntax on
+filetype plugin indent on
 colorscheme Tomorrow-Night-Bright
 
-" I'm pretty picky about tabs
-set noexpandtab
-set tabstop=4
-set shiftwidth=4
-set autoindent
-set softtabstop=0
-set backspace=2
-
-" I don't really use :cd, but whatevs
-set cdpath=/Users/shreve/,/Users/shreve/sites/
-
-" Turn on line numbers
-set number
-
-" Turn on ruler
-set ruler
-
-" Show cmd
-set showcmd
-
-" 2 lines of padding
-set scrolloff=2
+set nocompatible " stop behaving in a Vi-compatible way
+set autoindent " keep indentation on a new line
+set autoread " if a file updates, read it
+set backspace=indent,eol,start " allow backspacing over everything in insert mode (:h fixdel if issues)
+set backupdir=$DOTPATH/vim/tmp 
+set directory=$DOTPATH/vim/tmp " keep temporary and backup files in ~/.vim
+set gdefault " use the /g flag by default for :s
+set history=1000 " remember 1000 lines of history
+set ignorecase " by default ignore case in search
+set laststatus=2 " always display status line
+set list listchars=tab:»·,trail:· " display extra whitespace
+set noexpandtab " explicitly disable space->tab conversion
+set nowrap " don't linewrap, just continue past window
+set number " precede each line with file line number (only current line with relativenumber)
+set relativenumber " display line numbers in relation to current line
+set ruler " show line and column number of cursor
+set scrolloff=2 " 2 lines of padding when scrolling buffer
+set showcmd " show command as it's being typed
+set showmatch " breifly jump to matching bracket
+set shiftround " >> << round to multiple of shiftwidth
+set shiftwidth=4 " number of spaces to use for each indention step
+set smartcase " when a capital letter is used, turn off ignorecase
+set smartindent " indent properly in c-like languages
+set softtabstop=0 " number of spaces Tab 'feels like'
+set tabstop=4 " number of spaces Tab takes up
+set timeoutlen=500 " change timeout 
+set wildmenu " turns on menu used for tab-completion
+set wildmode=longest:full,full " complete longest common string, and activate wildmenu
 
 " syntax highlighting for .html.erb
-autocmd BufRead,BufNewFile *.html.erb set filetype=eruby.html
+au BufNewFile,BufRead *.html.erb set filetype=eruby.html
 
-" Keep temporary and backup files in ~/.vim
-set directory=$DOTPATH/vim/tmp
+" When loading text files, wrap them and don't split up words.
+au BufNewFile,BufRead *.txt setlocal wrap 
+au BufNewFile,BufRead *.txt setlocal lbr
+au BufNewFile,BufRead *.txt setlocal nolist " Don't display whitespace
+
+" Remove trailing whitespace on save for ruby and sass files.
+au BufWritePre *.{erb,rb,sass} :%s/\s\+$//e
+
+" override some weird sass behavior
+au FileType sass setlocal shiftwidth=4 noexpandtab
+
+let netrwhistpath="/Users/shreve/dotfiles/vim/.netrwhist"
+au VimLeave * if filereadable(netrwhistpath) | call delete(netrwhistpath) | endif
+
+
+map <Leader>s :Update<cr>
+map <Leader>h :Rhelper 
+map <Leader>c :Rcontroller 
+map <Leader>v :Rview 
+map <Leader>l :Rlayout 
+map <Leader>f :e test/factories/
+map <Leader>css :Rstylesheet 
+map <Leader>js :Rjavascript
+map <Leader>ut :Runittest 
+map <Leader>ac :Rcontroller application<cr>
+map <Leader>al :Rlayout application<cr>
+map <Leader>ca :e config/application.rb<cr>
+map <Leader>te :! time rake -rminitest/pride test<cr>
+map <Leader>r :silent ! touch tmp/restart.txt<cr>
+map <Leader>bc :silent ! open "http://basecamp.com/2257044/"<cr>
+
+" insert erb tags rc <%= %>, re <% %>
+nnoremap <Leader>rc i<% %><c-o>h<c-o>h
+nnoremap <Leader>re i<%= %><c-o>h<c-o>h
+
+" toggle paste mode
+nnoremap <Leader>p :set paste!<cr>
+
+" allow saving as sudo
+" http://stackoverflow.com/a/7078429/1893290
+cmap w!! w !sudo tee > /dev/null %
+
+" Prevent 'no command' error with incorrect capitalization
+command! Q q
+command! W w
+
+" edit ~/.vimrc files
+command! Vimrc :e ~/.vimrc
+
+" If the current buffer has never been saved, it will have no name,
+" call the file browser to save it, otherwise just save it.
+command! -nargs=0 -bar Update if &modified 
+	\|    if empty(bufname('%'))
+	\|        browse confirm write
+	\|    else
+	\|        confirm write
+	\|    endif
+	\|endif
+nnoremap <silent> <C-S> :<C-u>Update<CR>
