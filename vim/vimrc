@@ -34,12 +34,13 @@ set smartcase " when a capital letter is used, turn off ignorecase
 set smartindent " indent properly in c-like languages
 set softtabstop=0 " number of spaces Tab 'feels like'
 set tabstop=4 " number of spaces Tab takes up
-set timeoutlen=500 " change timeout 
+set timeoutlen=750 " change timeout 
 set wildmenu " turns on menu used for tab-completion
 set wildmode=longest:full,full " complete longest common string, and activate wildmenu
 
 " syntax highlighting for .html.erb
 au BufNewFile,BufRead *.html.erb set filetype=eruby.html
+au BufNewFile,BufRead *.coffee set filetype=javascript
 
 " When loading text files, wrap them and don't split up words.
 au BufNewFile,BufRead *.txt setlocal wrap 
@@ -56,25 +57,29 @@ let netrwhistpath="/Users/shreve/dotfiles/vim/.netrwhist"
 au VimLeave * if filereadable(netrwhistpath) | call delete(netrwhistpath) | endif
 
 
-map <Leader>s :Update<cr>
-map <Leader>h :Rhelper 
-map <Leader>c :Rcontroller 
-map <Leader>v :Rview 
-map <Leader>l :Rlayout 
-map <Leader>f :e test/factories/
-map <Leader>css :Rstylesheet 
-map <Leader>js :Rjavascript
-map <Leader>ut :Runittest 
 map <Leader>ac :Rcontroller application<cr>
 map <Leader>al :Rlayout application<cr>
+map <Leader>bc :silent ! open "http://basecamp.com/2257044/"<cr>:redraw!<cr>
+map <Leader>c :Rcontroller 
 map <Leader>ca :e config/application.rb<cr>
+map <Leader>css :Rstylesheet 
+map <Leader>f :e test/factories/
+map <Leader>h :Rhelper 
+map <Leader>js :Rjavascript
+map <Leader>l :e app/views/layouts/
+map <Leader>m :Rmodel 
+map <Leader>pg :silent ! open /Applications/PG\ Commander.app<cr>
+map <Leader>pr :silent ! touch tmp/restart.txt<cr>:redraw!<cr>
+map <Leader>rc :silent ! rails c<cr><esc>:redraw!<cr>
+map <Leader>rs :source ~/.vimrc<cr>
+map <Leader>s :w<cr>
 map <Leader>te :! time rake -rminitest/pride test<cr>
-map <Leader>r :silent ! touch tmp/restart.txt<cr>
-map <Leader>bc :silent ! open "http://basecamp.com/2257044/"<cr>
+map <Leader>ut :Runittest 
+map <Leader>v :Rview 
 
 " insert erb tags rc <%= %>, re <% %>
-nnoremap <Leader>rc i<% %><c-o>h<c-o>h
-nnoremap <Leader>re i<%= %><c-o>h<c-o>h
+nnoremap <Leader><, i<% %><c-o>h<c-o>h
+nnoremap <Leader><. i<%= %><c-o>h<c-o>h
 
 " toggle paste mode
 nnoremap <Leader>p :set paste!<cr>
