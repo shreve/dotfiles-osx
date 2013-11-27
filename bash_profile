@@ -1,26 +1,159 @@
-#                 //     ///////     ////    /////  //    //        //////////  //////////    /////    //////// //////// //     ///////
-#                //      //   ///   // // ///    // //    //        //     //// //     //// //     //  //          //    //     //
-#  ////         //       // ///    //  //  ////     ////////        //   ////   //   ////  //       // /////       //    //     /////
-# //  //  //   //        //    // ///////      ///  ////////        //////      //////     //       // //          //    //     //
-#      ////   //   ///   //   // //    // //    /// //    //        //          //   //     //     //  //          //    //     //
-#            //    ///   ////   //     //  //////   //    // ////// //          //    ///     /////    //       //////// ////// ///////
+# =================================================================================================
+#
+# 										1337 .bash_profile
+#
+# =================================================================================================
+#
+#	Table of Contents:
+#	1.	Environment Configuration
+#	2.	Sensible Defaults, and Enhancements
+#	3.	File & Folder Management
+#	4.	Searching
+#	5.	Development
+#	6.	Networking
+#	7.	Processes
+#	8.	Initializers
+#	9.	Labs
+#	10.	Bibliography
+
+
 
 
 #/////////////////////////////
 #
-#   Export Vars
+#   1.	Environment Configuration
 #
 #////////////////////////
 export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/sbin:/usr/local/heroku/bin"
 export EDITOR="vim"
-export PS1="\W$ "
+export PS1="\[\e[1;35m\]\W\$\[\e[0m\] "
 export DOTPATH="/Users/shreve/dotfiles"
 export CLICOLOR=1
 
 
 #/////////////////////////////
 #
-#   Initializers
+#   2.	Sensible Defaults, and Enhancements
+#
+#////////////////////////
+alias ~="cd ~"
+alias cp="cp -iv"
+alias mv="mv -iv"
+alias ls="ls -FAGh"
+alias ..="cd ../"
+alias ...="cd ../../"
+alias resource="source ~/.bash_profile; clear;"
+alias tac="sed '1!G;h;\$!d'"							# cat backwards
+most-used() { history | awk '{a[$2]++}END{for(i in a){print a[i] " " i}}' | sort -rn | head -20 ; }
+
+
+#/////////////////////////////
+#
+#   3. File & Folder Management
+#
+#////////////////////////
+alias pass="vim /private/pwd"											# files edited frequently enough to warrant aliases
+alias hosts="sudo vim /private/etc/hosts"								#   > system hosts
+alias vhosts="sudo vim /private/etc/apache2/extra/httpd-vhosts.conf"	#   > apache virtual hosts
+alias profile="vim ~/.bash_profile"										#   > this file!
+alias vimrc="vim ~/.vimrc"												#   > this file, but the vim version!
+alias gitconfig="vim ~/.gitconfig"										#   > global git configuration
+alias finder="open -a Finder ./"										# open pwd in Finder
+alias rm-ds="find . -type f -name '.DS_Store' -depth -delete"			# recursively remove .DS_Store files
+zipf () { zip -r "$1".zip "$1" ; }										# zip a folder
+if [ ! -e "/tmp/trash.aif" ]; then
+	ln -s /System/Library/Components/CoreAudio.component/Contents/SharedSupport/SystemSounds/finder/move\ to\ trash.aif /tmp/trash.aif
+fi
+trash () { command mv "$@" ~/.Trash ; afplay /tmp/trash.aif; }			# move a file to the trash
+preview () { qlmanage -p "$*" >& /dev/null; }							# open a file in quicklook / preview
+
+
+#/////////////////////////////
+#
+#	4. Searching
+#
+#////////////////////////
+ff() { find . -name "$@" ; }											# find via name
+ff0() { ff '*'"$@" ; }													# find where name ends with search
+ff1() { ff "$@"'*' ; }													# find where name starts with search
+spotlight() { mdfind "kMDItemDisplayName == '$@'wc" ; }					# find via spotlight
+recentfiles() {															# find via ctime
+	TIME=$1
+	if [ "$1" == "yesterday" ]
+	then
+		TIME=1d
+	fi
+	find . -ctime -$TIME -type f ! -name '.*' ! -regex '.*/\..*/.*' ! -name '*.log'
+}
+
+#/////////////////////////////
+#
+#	5.	Development
+#
+#////////////////////////
+alias apache="sudo apachectl"											# apache (restart|status|start|stop)
+alias bx="bundle exec"													# bundle execute
+alias bi="bundle install"												#        install
+alias bu="bundle update"												#        update
+alias vi="vim"															# goddamn vi
+alias heorku="heroku"													# goddamn heroku, keyboard acrobatics
+alias test="time rake -rminitest/pride test"							# default to rainbow tests
+cmake() { rm -f "$1"; make "$1"; ./"$1"; }								# shortcut from learning c
+pr() { if [ -e "tmp/restart.txt" ]; then touch tmp/restart.txt; fi }	# pow restart
+
+# git
+alias ignore-changes="git update-index --assume-unchanged"				# assume file will never change
+alias consider-changes="git update-index --assume-no-unchanged"			# assume file can change
+revert-file() {															# revert a single file, or all your changes.
+	if [ -n "$1" ]; then
+		echo "Reverting file or folder: $1"
+		git checkout HEAD -- $1
+		git reset -- $1
+	else
+		echo "No file selected. Revert all changes?"
+		read answer
+		if [[ "${answer}" =~ "y" ]]; then
+			echo "Reverting whole git directory"
+			git reset
+			git checkout HEAD
+		else
+			echo "Not reverting anything. Stay cool, bro. (!! to try again)"
+		fi
+	fi
+}
+garbage-collect() {														# delete files, and let git do GC magic
+    if [[ "`pwd`" != "$HOME" ]]; then rm-ds; fi
+    if [ -d ./.git ]; then git gc --aggressive --prune=now > /dev/null 2>&1; fi
+}
+
+stage-all() { garbage-collect; git add .; git status ;}					# stage all my changes to be commited
+
+
+#/////////////////////////////
+#
+#	6.	Networking
+#
+#////////////////////////
+alias router="open http://`ip r`"										# open router in the browser
+restart_router() {														# restart my home router (belkin whatevs)
+	curl -F "page=tools_gateway;logout;" `ip r`/cgi-bin/restart.exe
+}
+
+
+#/////////////////////////////
+#
+#	7.	Processes
+#
+#////////////////////////
+alias memHogsPs='ps wwaxm -o pid,stat,vsize,rss,time,command | head -10'
+alias cpu_hogs='ps wwaxr -o pid,stat,%cpu,time,command | head -10'		# find top cpu users
+findPid() { lsof -t -c "$@" ; }											# find pid via name
+myps() { ps $@ -u $USER -o pid,%cpu,%mem,time,bsdtime,command ; }		# list my processes
+
+
+#/////////////////////////////
+#
+#   8.	Initializers
 #
 #////////////////////////
 eval "$(rbenv init -)"
@@ -31,118 +164,20 @@ eval "$(direnv hook $0)"
 bind -r '\C-s'
 stty -ixon
 
-#/////////////////////////////
-#
-#   Aliases
-#
-#////////////////////////
-alias resource="source ~/.bash_profile; clear;"
-alias tunnel="pagoda tunnel db1 -a"
-alias apache="sudo apachectl" # apache (restart|status|start|stop)
-alias bx="bundle exec"
-alias bi="bundle install"
-alias rm-ds="find . -name '.DS_Store' -depth -exec rm {} \;"
-alias ls="ls -GFh"
+
+#         .---.
+#        _\___/_
+#         )\_/(
+#        /     \
+#       /       \
+#      /         \
+#     /~~~~~~~~~~~\
+#    /   9. Labs   \
+#   (               )
+#    `-------------'
+
 alias games="ls /usr/share/emacs/22.1/lisp/play"
-alias face="open http://www.facebook.com/"
-alias restart_router="curl -F \"page=tools_gateway;logout;\" `ip r`/cgi-bin/restart.exe"
-alias router="open http://`ip r`"
-# TODO: Expand These Bad Jacksons
-# alias copy="cat $1 | pbcopy"
-# alias paste="pbpaste >>"
-alias test="time rake -rminitest/pride test"
-alias heorku="heroku"
 alias parseint="sed -E 's/.*([0-9]+).*/\1/'"
-
-
-# Files I edit often enough to neccessitate shortcuts
-alias pass="vim /private/pwd"
-alias hosts="sudo vim /private/etc/hosts"
-alias vhosts="sudo vim /private/etc/apache2/extra/httpd-vhosts.conf"
-alias profile="vim ~/.bash_profile"
-alias vimrc="vim ~/.vimrc"
-alias gitconfig="vim ~/.gitconfig"
-
-# Git Aliases
-alias ignore-changes="git update-index --assume-unchanged"
-alias consider-changes="git update-index --assume-no-unchanged"
-
-
-#/////////////////////////////
-#
-#   Functions
-#
-#////////////////////////
-
-
-# cmake
-# shortcut to delete old file, make it, then run it.
-# probably belongs in a makefile
-cmake() { rm -f "$1"; make "$1"; ./"$1"; }
-
-
-recentfiles() {
-	TIME=$1
-	if [ "$1" == "yesterday" ]
-	then
-		TIME=1d
-	fi
-	find . -ctime -$TIME -type f ! -name '.*' ! -regex '.*/\..*/.*' ! -name '*.log'
-}
-
-#cd() {
-#	JUMP=$1
-#	if [ ! -d ./$1 ]; then
-#		if [ -d ~/Projects/$1 ]; then
-#			JUMP=~/Projects/$1
-#		fi
-#		
-#		if [ -d ~/Sites/$1 ]; then
-#			JUMP=~/Sites/$1
-#		fi
-#	fi
-#
-#	builtin cd $JUMP
-#}
-
-#_cd_() {
-#	local cmd="${1##*/}"
-#	local word=${COMP_WORDS[COMP_CWORD]}
-#	local line=${COMP_LINE}
-#	local xpat=''
-#
-#	COMPREPLY=(`compgen -f -- "${word}"` `cd ~/Sites/; compgen -f -- "${word}"` `cd ~/Projects/; compgen -f -- "${word}"` )
-#}
-#
-#complete -F _cd_ cd
-
-# touches restart.txt if it already exists to restart pow.
-restart() {
-	if [ -e "tmp/restart.txt" ]; then
-		echo 'restarting pow...'
-		touch tmp/restart.txt
-	else
-		echo 'not a pow project' 
-	fi
-}
-
-# once a day, run brew update
-brew-updater() {
-    LATESTPATH="$DOTPATH/data-for/brew-updater"
-    TIME=`date +%s`
-    LIMIT=$[`cat $LATESTPATH` + 86400 ]
-    if [ "$TIME" -ge "$LIMIT" ]; then
-        echo "Time for a fresh cup..."
-        brew update
-        rm $LATESTPATH
-        touch $LATESTPATH
-        date +%s > $LATESTPATH
-    fi
-}
-
-most-used() {
-	history | awk '{a[$2]++}END{for(i in a){print a[i] " " i}}' | sort -rn | head -25
-}
 
 vc() {
 	if [ -n "$1" ]
@@ -184,66 +219,29 @@ yiic() {
 	$YIIC "$@"
 }
 
+
+#/////////////////////////////
 #
-#   Git-related functions
-# 
+#	10.	Bibliography
+#
+#////////////////////////
+#
+#	some of the above functionality was bespoke, but plenty of
+#	it was ⌘C ⌘V'd in from, or inspired by other people who've
+#	posted their dotfiles online. Here are some that I
+#	remembered to write down.
+#
+#	Ben Orenstein (@r00k)
+#	https://github.com/r00k/dotfiles
+#
+#	Nathanel Landau (@natelandau)
+#	http://natelandau.com/my-mac-osx-bash_profile/
+#
+#////////////////////////////////////////////////////////////////
 
-# revert a single file, or all your changes.
-revert-file() {
-	if [ -n "$1" ]; then
-		echo "Reverting file or folder: $1"
-		git checkout HEAD -- $1
-		git reset -- $1
-	else
-		echo "No file selected. Revert all changes?"
-		read answer
-		if [[ "${answer}" =~ "y" ]]; then
-			echo "Reverting whole git directory"
-			git reset
-			git checkout HEAD
-		else
-			echo "Not reverting anything. Stay cool, bro. (!! to try again)"
-		fi
-	fi
-}
 
-# Delete all these damn .DS_Stores
-# then run git gc, but don't tell me how it goes
-garbage-collect() {
-    if [[ "`pwd`" != "$HOME" ]]; then
-		find . -name '.DS_Store' -exec rm {} \;
-	fi
-    if [ -d ./.git ]; then
-        git gc --aggressive --prune=now >/dev/null
-    fi
-}
-
-# stage all my changes to be commited
-stage-all() {
-	garbage-collect
-	git add .
-	git status
-}
-
-pssh() {
-	echo "pssh! you think this works yet? LOL"
-	#spawn ssh $1 -l $2
-	#expect "password"
-	#send $3;
-	#interact
-}
-
-findle() {
-	find . -name "$1" | grep -v "vendor/bundle"
-}
-
-cattle() {
-	if [[ -n "$1" ]]; then
-		SEARCH="$1"
-		echo "Searching for $SEARCH"
-		#sudo find . -name "$SEARCH" -exec cat {} \;
-		cat `findle $SEARCH`
-	else
-		echo "Enter a search term"
-	fi
-}
+# ================================================================================================
+#
+#											fin
+#
+# ================================================================================================
