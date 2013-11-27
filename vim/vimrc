@@ -13,7 +13,8 @@ set nocompatible " stop behaving in a Vi-compatible way
 set autoindent " keep indentation on a new line
 set autoread " if a file updates, read it
 set backspace=indent,eol,start " allow backspacing over everything in insert mode (:h fixdel if issues)
-set backupdir=$DOTPATH/vim/tmp 
+set backupdir=$DOTPATH/vim/tmp
+set cryptmethod=blowfish " use blowfish to encrypt a file
 set directory=$DOTPATH/vim/tmp " keep temporary and backup files in ~/.vim
 set gdefault " use the /g flag by default for :s
 set history=1000 " remember 1000 lines of history
@@ -34,7 +35,7 @@ set smartcase " when a capital letter is used, turn off ignorecase
 set smartindent " indent properly in c-like languages
 set softtabstop=0 " number of spaces Tab 'feels like'
 set tabstop=4 " number of spaces Tab takes up
-set timeoutlen=750 " change timeout 
+set timeoutlen=750 " change timeout
 set wildmenu " turns on menu used for tab-completion
 set wildmode=longest:full,full " complete longest common string, and activate wildmenu
 
@@ -43,7 +44,7 @@ au BufNewFile,BufRead *.html.erb set filetype=eruby.html
 au BufNewFile,BufRead *.coffee set filetype=javascript
 
 " When loading text files, wrap them and don't split up words.
-au BufNewFile,BufRead *.txt setlocal wrap 
+au BufNewFile,BufRead *.txt setlocal wrap
 au BufNewFile,BufRead *.txt setlocal lbr
 au BufNewFile,BufRead *.txt setlocal nolist " Don't display whitespace
 
@@ -56,6 +57,8 @@ au FileType sass setlocal shiftwidth=4 noexpandtab
 let netrwhistpath="/Users/shreve/dotfiles/vim/.netrwhist"
 au VimLeave * if filereadable(netrwhistpath) | call delete(netrwhistpath) | endif
 
+" security measures when opening a file that has been VimCrypt'd
+autocmd BufReadPost * if &key != "" | set noswapfile nowritebackup viminfo= nobackup noshelltemp history=0 secure | endif
 
 map <Leader>ac :Rcontroller application<cr>
 map <Leader>al :Rlayout application<cr>
@@ -65,7 +68,7 @@ map <Leader>ca :e config/application.rb<cr>
 map <Leader>css :Rstylesheet 
 map <Leader>f :e test/factories/
 map <Leader>h :Rhelper 
-map <Leader>js :Rjavascript
+map <Leader>js :Rjavascript 
 map <Leader>l :e app/views/layouts/
 map <Leader>m :Rmodel 
 map <Leader>pg :silent ! open /Applications/PG\ Commander.app<cr>
@@ -97,7 +100,7 @@ command! Vimrc :e ~/.vimrc
 
 " If the current buffer has never been saved, it will have no name,
 " call the file browser to save it, otherwise just save it.
-command! -nargs=0 -bar Update if &modified 
+command! -nargs=0 -bar Update if &modified
 	\|    if empty(bufname('%'))
 	\|        browse confirm write
 	\|    else
@@ -105,3 +108,32 @@ command! -nargs=0 -bar Update if &modified
 	\|    endif
 	\|endif
 nnoremap <silent> <C-S> :<C-u>Update<CR>
+
+" Set tabstop, softtabstop and shiftwidth to the same value
+command! -nargs=* Stab call Stab()
+function! Stab()
+	let l:tabstop = 1 * input('set tabstop = softtabstop = shiftwidth = ')
+	if l:tabstop > 0
+		let &l:sts = l:tabstop
+		let &l:ts = l:tabstop
+		let &l:sw = l:tabstop
+	endif
+	call SummarizeTabs()
+endfunction
+
+function! SummarizeTabs()
+	try
+		echohl ModeMsg
+		echon 'tabstop='.&l:ts
+		echon ' shiftwidth='.&l:sw
+		echon ' softtabstop='.&l:sts
+		if &l:et
+			echon ' expandtab'
+		else
+			echon ' noexpandtab'
+		endif
+	finally
+		echohl None
+	endtry
+endfunction
+
