@@ -1,6 +1,6 @@
 # =================================================================================================
 #
-#                                       1337 .bash_profile
+#                                       1337 .bashrc
 #
 # =================================================================================================
 #
@@ -28,6 +28,7 @@ export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/sbin:/usr/l
 export EDITOR="vim"
 export PS1="\[\e[1;35m\]\W\$\[\e[0m\] "
 export DOTPATH="/Users/shreve/dotfiles"
+export DOT=$DOTPATH
 export CLICOLOR=1
 
 
@@ -37,14 +38,21 @@ export CLICOLOR=1
 #
 #////////////////////////
 alias ~="cd ~"
-alias cp="cp -iv"
+alias c="clear"
+alias cp="cp -ivr"
 alias mv="mv -iv"
 alias ls="ls -FAGh"
 alias ..="cd ../"
 alias ...="cd ../../"
 alias resource="source ~/.bash_profile; clear;"
 alias tac="sed '1!G;h;\$!d'"                            # cat backwards
-most-used() { history | awk '{a[$2]++}END{for(i in a){print a[i] " " i}}' | sort -rn | head -20 ; }
+alias clock="while sleep 1;do tput sc;tput cup 0 $(($(tput cols)-29));date;tput rc;done &"
+cd() { builtin cd "$@"; ls; } 							# Always list directory contents
+history() {
+	LINES="-20"
+	if [[ -n $1 ]]; then LINES="-$1"; echo "Showing $1 most used commands"; fi
+	builtin history | awk '{a[$2]++}END{for(i in a){print a[i] " " i}}' | sort -rn | head $LINES
+}
 
 
 #/////////////////////////////
@@ -60,6 +68,7 @@ alias vimrc="vim ~/.vimrc"                                              #   > th
 alias gitconfig="vim ~/.gitconfig"                                      #   > global git configuration
 alias finder="open -a Finder ./"                                        # open pwd in Finder
 alias rm-ds="find . -type f -name '.DS_Store' -depth -delete"           # recursively remove .DS_Store files
+alias lss="du -sh * | sort -nr | head"                                  # list files in a directory with their size
 zipf () { zip -r "$1".zip "$1" ; }                                      # zip a folder
 if [ ! -e "/tmp/trash.aif" ]; then
     ln -s /System/Library/Components/CoreAudio.component/Contents/SharedSupport/SystemSounds/finder/move\ to\ trash.aif /tmp/trash.aif
@@ -97,6 +106,7 @@ alias bi="bundle install"                                               #       
 alias bu="bundle update"                                                #        update
 alias vi="vim"                                                          # goddamn vi
 alias heorku="heroku"                                                   # goddamn heroku, keyboard acrobatics
+alias ios="open -a /Applications/Xcode.app/Contents/Applications/iPhone\ Simulator.app"
 alias test="time rake -rminitest/pride test"                            # default to rainbow tests
 cmake() { rm -f "$1"; make "$1"; ./"$1"; }                              # shortcut from learning c
 pr() { if [ -e "tmp/restart.txt" ]; then touch tmp/restart.txt; fi }    # pow restart
@@ -136,7 +146,8 @@ stage-all() { garbage-collect; git add .; git status ;}                 # stage 
 #////////////////////////
 alias router="open http://`ip r`"                                       # open router in the browser
 restart_router() {                                                      # restart my home router (belkin whatevs)
-    curl -F "page=tools_gateway;logout;" `ip r`/cgi-bin/restart.exe
+    curl -F "pws=;" `ip r`/cgi-bin/login.exe
+	curl -F "page=tools_gateway;logout;" `ip r`/cgi-bin/restart.exe
 }
 
 
