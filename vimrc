@@ -48,8 +48,8 @@ au BufNewFile,BufRead *.txt setlocal wrap
 au BufNewFile,BufRead *.txt setlocal lbr
 au BufNewFile,BufRead *.txt setlocal nolist " Don't display whitespace
 
-" Remove trailing whitespace on save for ruby and sass files.
-au BufWritePre *.{erb,rb,sass} :%s/\s\+$//e
+" Remove trailing whitespace on save for certain file types.
+au BufWritePre *.{erb,rb,sass,html,js} :%s/\s\+$//e
 
 " override some weird sass behavior
 au FileType sass setlocal shiftwidth=4 noexpandtab
@@ -58,7 +58,7 @@ let netrwhistpath="/Users/shreve/dotfiles/vim/.netrwhist"
 au VimLeave * if filereadable(netrwhistpath) | call delete(netrwhistpath) | endif
 
 " security measures when opening a file that has been VimCrypt'd
-autocmd BufReadPost * if &key != "" | set noswapfile nowritebackup viminfo= nobackup noshelltemp history=0 secure | endif
+au BufReadPost * if &key != "" | set noswapfile nowritebackup viminfo= nobackup noshelltemp history=0 secure | endif
 
 map <Leader>ac :Rcontroller application<cr>
 map <Leader>al :Rlayout application<cr>
@@ -66,6 +66,7 @@ map <Leader>bc :silent ! open "http://basecamp.com/2257044/"<cr>:redraw!<cr>
 map <Leader>c :Rcontroller 
 map <Leader>ca :e config/application.rb<cr>
 map <Leader>css :Rstylesheet 
+map <Leader>e :e.<cr>
 map <Leader>f :e test/factories/
 map <Leader>h :Rhelper 
 map <Leader>js :Rjavascript 
@@ -85,7 +86,14 @@ nnoremap <Leader><, i<% %><c-o>h<c-o>h
 nnoremap <Leader><. i<%= %><c-o>h<c-o>h
 
 " toggle paste mode
-nnoremap <Leader>p :set paste!<cr>
+nnoremap <Leader>p :set paste! list! number! relativenumber!<cr>
+
+" Get off my lawn
+noremap <Left> :echoe "Use h"<CR>
+noremap <Right> :echoe "Use l"<CR>
+noremap <Up> :echoe "Use k"<CR>
+noremap <Down> :echoe "Use j"<CR>
+
 
 " allow saving as sudo
 " http://stackoverflow.com/a/7078429/1893290
@@ -136,4 +144,3 @@ function! SummarizeTabs()
 		echohl None
 	endtry
 endfunction
-
