@@ -47,7 +47,15 @@ alias ...="cd ../../"
 alias resource="source ~/.bash_profile; clear;"
 alias tac="sed '1!G;h;\$!d'"                            # cat backwards
 alias clock="while sleep 1;do tput sc;tput cup 0 $(($(tput cols)-29));date;tput rc;done &"
-cd() { builtin cd "$@"; ls; } 							# Always list directory contents
+cd() {				# Always list directory contents
+	builtin cd "$@"
+	pretty_print -b --yellow `pwd`
+	ls
+	if [ -d ./.git ]; then
+		printf '\nGit Status:\n'
+		git status
+	fi
+}
 history() {
 	LINES="-20"
 	if [[ -n $1 ]]; then LINES="-$1"; echo "Showing $1 most used commands"; fi
@@ -230,6 +238,46 @@ yiic() {
     $YIIC "$@"
 }
 
+pretty_print() {
+	prompt="\033["
+	escape="\033[0m"
+
+	# Formatting (bold, underline)
+	if [[ $* == -*b* ]]; then
+		prompt=$prompt"01;"
+	fi
+	#if [[ $* == -*i* ]]; then
+	#	prompt=$prompt"03;"
+	#fi
+	if [[ $* == -*u* ]]; then
+		prompt=$prompt"04;"
+	fi
+	#if [[ $* == -*r* ]]; then
+	#	prompt=$prompt"07;"
+	#fi
+
+	# Foreground colors
+	if [[ $* == -*g* || $* == *"--green"* ]]; then
+		prompt=$prompt"38;05;70;"
+	fi
+
+	if [[ $* == -*y* || $* == *"--yellow"* ]]; then
+		prompt=$prompt"38;05;226;"
+	fi
+
+	if [[ $* == *"--col="* ]]; then
+		number=`echo "$*" | sed -E 's/.*--col=(.*) .*/\1/g'`
+		prompt=$prompt"38;05;$number;"
+	fi
+
+	# Trim off the last semicolon
+	prompt=`echo "$prompt" | sed -E 's/;$//g'`"m"
+
+	# Remove flags
+	output=`echo "$*" | sed -E 's/-+.* //g'`
+
+	echo -e "${prompt}${output}${escape}"
+}
 
 #/////////////////////////////
 #
