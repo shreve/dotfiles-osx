@@ -70,9 +70,9 @@ history() {
 alias pass="vim /private/pwd"                                           # files edited frequently enough to warrant aliases
 alias hosts="sudo vim /private/etc/hosts"                               #   > system hosts
 alias vhosts="sudo vim /private/etc/apache2/extra/httpd-vhosts.conf"    #   > apache virtual hosts
-alias profile="vim ~/.bash_profile"                                     #   > this file!
-alias vimrc="vim ~/.vimrc"                                              #   > this file, but the vim version!
-alias gitconfig="vim ~/.gitconfig"                                      #   > global git configuration
+alias profile="vim $DOT/bashrc"                                         #   > this file!
+alias vimrc="vim $DOT/vimrc"                                            #   > this file, but the vim version!
+alias gitconfig="vim $DOT/gitconfig"                                    #   > global git configuration
 alias finder="open -a Finder ./"                                        # open pwd in Finder
 alias rm-ds="find . -type f -name '.DS_Store' -depth -delete"           # recursively remove .DS_Store files
 alias lss="du -sh * | sort -nr | head"                                  # list files in a directory with their size
