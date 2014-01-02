@@ -14,7 +14,6 @@
 #   7.  Processes
 #   8.  Initializers
 #   9.  Labs
-#   10. Bibliography
 
 
 
@@ -84,7 +83,6 @@ fi
 trash () { command mv "$@" ~/.Trash ; afplay /tmp/trash.aif; }          # move a file to the trash
 preview () { qlmanage -p "$*" >& /dev/null; }                           # open a file in quicklook / preview
 
-
 #/////////////////////////////
 #
 #   4. Searching
@@ -120,6 +118,7 @@ cmake() { rm -f "$1"; make "$1"; ./"$1"; }                              # shortc
 pr() { if [ -e "tmp/restart.txt" ]; then touch tmp/restart.txt; fi }    # pow restart
 
 # git
+alias gc="garbage-collect"
 alias ignore-changes="git update-index --assume-unchanged"              # assume file will never change
 alias consider-changes="git update-index --assume-no-unchanged"         # assume file can change
 revert-file() {                                                         # revert a single file, or all your changes.
@@ -140,8 +139,10 @@ else
 fi
 }
 garbage-collect() {                                                     # delete files, and let git do GC magic
-if [[ "`pwd`" != "$HOME" ]]; then rm-ds; fi
-if [ -d ./.git ]; then git gc --aggressive --prune=now > /dev/null 2>&1; fi
+    if [[ "`pwd`" != "$HOME" ]]; then rm-ds; fi
+    if [ -d ./.git ]; then git gc --aggressive --prune=now > /dev/null 2>&1; fi
+    if [ -d vendor/bundle ]; then bundle clean; fi
+    if [ -d tmp/cache ]; then rm -rf tmp/cache; fi
 }
 
 stage-all() { garbage-collect; git add .; git status ;}                 # stage all my changes to be commited
@@ -154,8 +155,9 @@ stage-all() { garbage-collect; git add .; git status ;}                 # stage 
 #////////////////////////
 alias router="open http://`ip r`"                                       # open router in the browser
 restart_router() {                                                      # restart my home router (belkin whatevs)
-    curl -F "pws=;" `ip r`/cgi-bin/login.exe
-	curl -F "page=tools_gateway;logout;" `ip r`/cgi-bin/restart.exe
+    formstring="pws=d41d8cd98f00b204e9800998ecf8427e&totalMSec=`date +%s`"
+	curl `ip r`/cgi-bin/login.exe -sLd $formstring >/dev/null
+	curl `ip r`/cgi-bin/restart.exe -sLd "page=tools_gateway&logout" >/dev/null
 }
 
 
@@ -279,25 +281,11 @@ pretty_print() {
 	echo -e "${prompt}${output}${escape}"
 }
 
-#/////////////////////////////
-#
-#   10. Bibliography
-#
-#////////////////////////
-#
-#   some of the above functionality was bespoke, but plenty of
-#   it was ⌘C ⌘V'd in from, or inspired by other people who've
-#   posted their dotfiles online. Here are some that I
-#   remembered to write down.
-#
-#   Ben Orenstein (@r00k)
-#   https://github.com/r00k/dotfiles
-#
-#   Nathanel Landau (@natelandau)
-#   http://natelandau.com/my-mac-osx-bash_profile/
-#
-#////////////////////////////////////////////////////////////////
-
+tweet() {
+	t ruler
+	read tweet
+	t update "$tweet"
+}
 
 # ================================================================================================
 #
