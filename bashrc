@@ -41,10 +41,13 @@ alias c="clear"
 alias cp="cp -ivr"
 alias mv="mv -iv"
 alias ls="ls -FAGh"
+alias rs=". ~/.bash_profile; clear"
 alias ..="cd ../"
 alias ...="cd ../../"
-alias resource="source ~/.bash_profile; clear;"
 alias tac="sed '1!G;h;\$!d'"                            # cat backwards
+alias irc="irssi"
+alias tree="tree -C"
+alias trls="tree -C | less -R"
 alias clock="while sleep 1;do tput sc;tput cup 0 $(($(tput cols)-29));date;tput rc;done &"
 cd() {				# Always list directory contents
 	builtin cd "$@"
@@ -70,7 +73,7 @@ history() {
 alias pass="vim /private/pwd"                                           # files edited frequently enough to warrant aliases
 alias hosts="sudo vim /private/etc/hosts"                               #   > system hosts
 alias vhosts="sudo vim /private/etc/apache2/extra/httpd-vhosts.conf"    #   > apache virtual hosts
-alias profile="vim $DOT/bashrc"                                         #   > this file!
+alias bashrc="vim $DOT/bashrc"                                         #   > this file!
 alias vimrc="vim $DOT/vimrc"                                            #   > this file, but the vim version!
 alias gitconfig="vim $DOT/gitconfig"                                    #   > global git configuration
 alias finder="open -a Finder ./"                                        # open pwd in Finder
@@ -145,15 +148,24 @@ garbage-collect() {                                                     # delete
     if [ -d tmp/cache ]; then rm -rf tmp/cache; fi
 }
 
-stage-all() { garbage-collect; git add .; git status ;}                 # stage all my changes to be commited
+add-new() {
+    git status --porcelain | grep ? | awk '{print $2}' | xargs git add
+}
 
+stage-all() {      # stage all my changes to be commited
+    garbage-collect
+    git add .
+    git status
+}
 
 #/////////////////////////////
 #
 #   6.  Networking
 #
 #////////////////////////
-alias router="open http://`ip r`"                                       # open router in the browser
+router() {                                                              # open router in the browser
+	open http://`ip r`
+}
 restart_router() {                                                      # restart my home router (belkin whatevs)
     formstring="pws=d41d8cd98f00b204e9800998ecf8427e&totalMSec=`date +%s`"
 	curl `ip r`/cgi-bin/login.exe -sLd $formstring >/dev/null
