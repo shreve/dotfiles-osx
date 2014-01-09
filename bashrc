@@ -16,6 +16,7 @@
 #   9.  Labs
 
 
+echo "running ~/.bashrc"
 
 
 #/////////////////////////////
@@ -23,6 +24,7 @@
 #   1.  Environment Configuration
 #
 #////////////////////////
+echo "configuring environment variables"
 export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/sbin:/usr/local/heroku/bin"
 export EDITOR="vim"
 export PS1="\[\e[1;35m\]\W\$\[\e[0m\] "
@@ -30,12 +32,14 @@ export DOTPATH="/Users/shreve/dotfiles"
 export DOT=$DOTPATH
 export CLICOLOR=1
 
+echo "adding some cool aliases and functions to:"
 
 #/////////////////////////////
 #
 #   2.  Sensible Defaults, and Enhancements
 #
 #////////////////////////
+echo "  * extend bash"
 alias ~="cd ~"
 alias c="clear"
 alias cp="cp -ivr"
@@ -70,6 +74,7 @@ history() {
 #   3. File & Folder Management
 #
 #////////////////////////
+echo "  * help with file management"
 alias pass="vim /private/pwd"                                           # files edited frequently enough to warrant aliases
 alias hosts="sudo vim /private/etc/hosts"                               #   > system hosts
 alias vhosts="sudo vim /private/etc/apache2/extra/httpd-vhosts.conf"    #   > apache virtual hosts
@@ -91,6 +96,7 @@ preview () { qlmanage -p "$*" >& /dev/null; }                           # open a
 #   4. Searching
 #
 #////////////////////////
+echo "  * search the filesystem"
 ff() { find . -name "$@" ; }                                            # find via name
 ff0() { ff '*'"$@" ; }                                                  # find where name ends with search
 ff1() { ff "$@"'*' ; }                                                  # find where name starts with search
@@ -109,6 +115,7 @@ recentfiles() {                                                         # find v
 #   5.  Development
 #
 #////////////////////////
+echo "  * aid development"
 alias apache="sudo apachectl"                                           # apache (restart|status|start|stop)
 alias bx="bundle exec"                                                  # bundle execute
 alias bi="bundle install"                                               #        install
@@ -163,6 +170,7 @@ stage-all() {      # stage all my changes to be commited
 #   6.  Networking
 #
 #////////////////////////
+echo "  * work over the network"
 router() {                                                              # open router in the browser
 	open http://`ip r`
 }
@@ -189,8 +197,12 @@ myps() { ps $@ -u $USER -o pid,%cpu,%mem,time,bsdtime,command ; }       # list m
 #   8.  Initializers
 #
 #////////////////////////
+echo "initializing"
+echo "  * rbenv"
 eval "$(rbenv init -)"
+echo "  * hub"
 eval "$(hub alias -s)"
+echo "  * direnv"
 eval "$(direnv hook $0)"
 
 # Disable XOFF on <C-S>
@@ -298,6 +310,10 @@ tweet() {
 	read tweet
 	t update "$tweet"
 }
+
+echo "done."
+sleep 1
+clear
 
 # ================================================================================================
 #
