@@ -128,6 +128,7 @@ cmake() { rm -f "$1"; make "$1"; ./"$1"; }                              # shortc
 pr() { if [ -e "tmp/restart.txt" ]; then touch tmp/restart.txt; fi }    # pow restart
 
 # git
+alias g="git"
 alias gc="garbage-collect"
 alias ignore-changes="git update-index --assume-unchanged"              # assume file will never change
 alias consider-changes="git update-index --assume-no-unchanged"         # assume file can change
@@ -200,10 +201,10 @@ myps() { ps $@ -u $USER -o pid,%cpu,%mem,time,bsdtime,command ; }       # list m
 echo "initializing"
 echo "  * rbenv"
 eval "$(rbenv init -)"
-echo "  * hub"
-eval "$(hub alias -s)"
-echo "  * direnv"
-eval "$(direnv hook $0)"
+#echo "  * hub"
+#eval "$(hub alias -s)"
+#echo "  * direnv"
+#eval "$(direnv hook $0)"
 
 # Disable XOFF on <C-S>
 bind -r '\C-s'
