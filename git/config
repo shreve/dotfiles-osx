@@ -1,0 +1,33 @@
+[alias]
+  aa = add --all
+  b = branch
+  c = commit
+  cl = "!hub clone"
+  st = status -sb
+[color]
+  branch = auto
+  diff = auto
+  interactive = auto
+  status = auto
+  ui = true
+[commit]
+  template = ~/.gitmessage
+[core]
+  quotepath = false
+  editor = vim
+  excludesfile = ~/.gitignore
+[diff]
+  tool = /Applications/Xcode.app/Contents/Applications/FileMerge.app
+[help]
+  autocorrect = 1          # run the typo suggestion command if there is only one
+[merge]
+  tool = diffmerge
+[push]
+  default = upstream
+[user]
+  name = Jacob Evan Shreve
+  email = jacob@shreve.ly
+[url "git@heroku.com:"]
+  insteadOf = heroku:     # $ git remote add heroku:my-app.git
+[url "git@github.com:"]
+  insteadOf = github:     # $ git remote add github:my-repo.git
