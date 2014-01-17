@@ -44,6 +44,7 @@ set wildmode=longest:full,full " complete longest common string, and activate wi
 
 " syntax highlighting for .html.erb
 au BufNewFile,BufRead *.html.erb set filetype=eruby.html
+au BufNewFile,BufRead *.rake set filetype=ruby
 " au BufNewFile,BufRead *.coffee set filetype=javascript
 
 " When loading text files, wrap them and don't split up words.
