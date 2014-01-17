@@ -1,5 +1,11 @@
+# Files
 .DS_Store
+tags
+
+# Filetypes
 *.swp
-private
 .envrc
+
+# Directories
+private
 vendor/bundle
