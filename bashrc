@@ -122,7 +122,10 @@ alias bi="bundle install"                                               #       
 alias bu="bundle update"                                                #        update
 alias vi="vim"                                                          # goddamn vi
 alias heorku="heroku"                                                   # goddamn heroku, keyboard acrobatics
+alias rds="rake deploy:staging"
+alias rdp="rake deploy:production"
 alias ios="open -a /Applications/Xcode.app/Contents/Applications/iPhone\ Simulator.app"
+alias biron="bx iron_worker"
 alias test="time rake -rminitest/pride test"                            # default to rainbow tests
 cmake() { rm -f "$1"; make "$1"; ./"$1"; }                              # shortcut from learning c
 pr() { if [ -e "tmp/restart.txt" ]; then touch tmp/restart.txt; fi }    # pow restart
@@ -313,7 +316,6 @@ tweet() {
 }
 
 echo "done."
-sleep 1
 clear
 
 # ================================================================================================
