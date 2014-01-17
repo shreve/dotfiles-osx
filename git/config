@@ -3,6 +3,7 @@
   b = branch
   c = commit
   cl = "!hub clone"
+  ctags = "!.git/hooks/ctags"
   st = status -sb
 [color]
   branch = auto
@@ -20,6 +21,8 @@
   tool = /Applications/Xcode.app/Contents/Applications/FileMerge.app
 [help]
   autocorrect = 1          # run the typo suggestion command if there is only one
+[init]
+  templatedir = ~/dotfiles/git/template
 [merge]
   tool = diffmerge
 [push]
