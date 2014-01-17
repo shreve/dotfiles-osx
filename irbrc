@@ -5,14 +5,12 @@ puts "`loadext` for some gems"
 require 'irb/completion'
 require 'irb/ext/save-history'
 
-
 def loadext
   reqs = %w[
     rubygems
     fileutils
     ostruct
     ap
-    dooperific
   ]
 
   loaded_reqs = []
