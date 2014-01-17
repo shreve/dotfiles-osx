@@ -61,9 +61,6 @@ au BufReadPost *
 	\ 	exe "normal g`\"" |
 	\ endif
 
-" override some weird sass behavior
-au FileType sass setlocal shiftwidth=4 noexpandtab
-
 let netrwhistpath="/Users/shreve/dotfiles/vim/.netrwhist"
 au VimLeave * if filereadable(netrwhistpath) | call delete(netrwhistpath) | endif
 
