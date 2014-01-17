@@ -40,6 +40,7 @@ echo "adding some cool aliases and functions to:"
 #
 #////////////////////////
 echo "  * extend bash"
+export CDPATH="~/Sites:~/Projects"                      # enable cd-ing into these directories from anywhere
 alias ~="cd ~"
 alias c="clear"
 alias cp="cp -ivr"
@@ -121,6 +122,7 @@ alias bx="bundle exec"                                                  # bundle
 alias bi="bundle install"                                               #        install
 alias bu="bundle update"                                                #        update
 alias vi="vim"                                                          # goddamn vi
+alias pow="powder"
 alias heorku="heroku"                                                   # goddamn heroku, keyboard acrobatics
 alias rds="rake deploy:staging"
 alias rdp="rake deploy:production"
