@@ -1,12 +1,15 @@
 let &rtp = printf('%s/dotfiles/vim,%s,%s/dotfiles/vim/after', $HOME, $VIMRUNTIME, $HOME) " include $DOTPATH
 
+runtime  macros/matchit.vim
+
 call pathogen#infect() " Shout out to Tpope!
 
 let mapleader="," " <Leader> = ,
 
+filetype plugin indent on
+
 " Theming and shit like that
 syntax on
-filetype plugin indent on
 colorscheme Tomorrow-Night-Bright
 
 set nocompatible " stop behaving in a Vi-compatible way
@@ -16,12 +19,12 @@ set backspace=indent,eol,start " allow backspacing over everything in insert mod
 set backupdir=$DOTPATH/vim/tmp
 set cryptmethod=blowfish " use blowfish to encrypt a file
 set directory=$DOTPATH/vim/tmp " keep temporary and backup files in ~/.vim
+set expandtab " explicitly enable tab->space conversion
 set gdefault " use the /g flag by default for :s
 set history=1000 " remember 1000 lines of history
 set ignorecase " by default ignore case in search
 set laststatus=2 " always display status line
 set list listchars=tab:»·,trail:· " display extra whitespace
-set noexpandtab " explicitly disable space->tab conversion
 set nowrap " don't linewrap, just continue past window
 set number " precede each line with file line number (only current line with relativenumber)
 set relativenumber " display line numbers in relation to current line
@@ -33,7 +36,7 @@ set shiftround " >> << round to multiple of shiftwidth
 set shiftwidth=4 " number of spaces to use for each indention step
 set smartcase " when a capital letter is used, turn off ignorecase
 set smartindent " indent properly in c-like languages
-set softtabstop=0 " number of spaces Tab 'feels like'
+set softtabstop=4 " number of spaces Tab 'feels like'
 set tabstop=4 " number of spaces Tab takes up
 set timeoutlen=750 " change timeout
 set wildmenu " turns on menu used for tab-completion
@@ -41,7 +44,7 @@ set wildmode=longest:full,full " complete longest common string, and activate wi
 
 " syntax highlighting for .html.erb
 au BufNewFile,BufRead *.html.erb set filetype=eruby.html
-au BufNewFile,BufRead *.coffee set filetype=javascript
+" au BufNewFile,BufRead *.coffee set filetype=javascript
 
 " When loading text files, wrap them and don't split up words.
 au BufNewFile,BufRead *.txt setlocal wrap
@@ -49,7 +52,14 @@ au BufNewFile,BufRead *.txt setlocal lbr
 au BufNewFile,BufRead *.txt setlocal nolist " Don't display whitespace
 
 " Remove trailing whitespace on save for certain file types.
-au BufWritePre *.{erb,rb,sass,html,js} :%s/\s\+$//e
+" Also, try to prevent the cursor from jumping
+au BufWritePre *.{erb,rb,sass,html,js,java} :call TrimWhiteSpace()
+
+" Try to restore position
+au BufReadPost *
+	\ if line("'\"") > 0 && line("'\"") <= line("$") |
+	\ 	exe "normal g`\"" |
+	\ endif
 
 " override some weird sass behavior
 au FileType sass setlocal shiftwidth=4 noexpandtab
@@ -65,6 +75,8 @@ map <Leader>al :Rlayout application<cr>
 map <Leader>bc :silent ! open "http://basecamp.com/2257044/"<cr>:redraw!<cr>
 map <Leader>c :Rcontroller 
 map <Leader>ca :e config/application.rb<cr>
+" copy selection to clipboard
+map <Leader>cp :w !tee \| sed -E 's/^ *(.*) */\1/' \| pbcopy<cr>
 map <Leader>css :Rstylesheet 
 map <Leader>e :e.<cr>
 map <Leader>f :e test/factories/
@@ -76,7 +88,7 @@ map <Leader>pg :silent ! open /Applications/PG\ Commander.app<cr>
 map <Leader>pr :silent ! touch tmp/restart.txt<cr>:redraw!<cr>
 map <Leader>rc :silent ! rails c<cr><esc>:redraw!<cr>
 map <Leader>rs :source ~/.vimrc<cr>
-map <Leader>s :w<cr>
+map <Leader>s :w!<cr>
 map <Leader>te :! time rake -rminitest/pride test<cr>
 map <Leader>ut :Runittest 
 map <Leader>v :Rview 
@@ -87,6 +99,10 @@ nnoremap <Leader><. i<%= %><c-o>h<c-o>h
 
 " toggle paste mode
 nnoremap <Leader>p :set paste! list! number! relativenumber!<cr>
+
+
+" jump to the first line character on 0
+nnoremap 0 ^
 
 " Get off my lawn
 noremap <Left> :echoe "Use h"<CR>
@@ -143,4 +159,18 @@ function! SummarizeTabs()
 	finally
 		echohl None
 	endtry
+endfunction
+
+function! TrimWhiteSpace()
+	normal ms
+	%s/\s\+$//e
+	normal `s
+endfunction
+
+function! Copy()
+	normal '<,'>w !tee | pbcopy
+endfunction
+
+function! BufferOrProjectDirectory()
+	let currentbufferpath = expand('%:h')
 endfunction
