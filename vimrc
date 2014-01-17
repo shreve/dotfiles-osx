@@ -107,6 +107,8 @@ noremap <Right> :echoe "Use l"<CR>
 noremap <Up> :echoe "Use k"<CR>
 noremap <Down> :echoe "Use j"<CR>
 
+" jump between tags more easily
+map <C-[> <C-t>
 
 " allow saving as sudo
 " http://stackoverflow.com/a/7078429/1893290
