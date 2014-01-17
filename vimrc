@@ -33,11 +33,11 @@ set scrolloff=2 " 2 lines of padding when scrolling buffer
 set showcmd " show command as it's being typed
 set showmatch " breifly jump to matching bracket
 set shiftround " >> << round to multiple of shiftwidth
-set shiftwidth=4 " number of spaces to use for each indention step
+set shiftwidth=2 " number of spaces to use for each indention step
 set smartcase " when a capital letter is used, turn off ignorecase
 set smartindent " indent properly in c-like languages
-set softtabstop=4 " number of spaces Tab 'feels like'
-set tabstop=4 " number of spaces Tab takes up
+set softtabstop=2 " number of spaces Tab 'feels like'
+set tabstop=2 " number of spaces Tab takes up
 set timeoutlen=750 " change timeout
 set wildmenu " turns on menu used for tab-completion
 set wildmode=longest:full,full " complete longest common string, and activate wildmenu
