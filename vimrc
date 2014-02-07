@@ -58,9 +58,9 @@ au BufWritePre *.{erb,rb,sass,html,js,java} :call TrimWhiteSpace()
 
 " Try to restore position
 au BufReadPost *
-	\ if line("'\"") > 0 && line("'\"") <= line("$") |
-	\ 	exe "normal g`\"" |
-	\ endif
+  \ if line("'\"") > 0 && line("'\"") <= line("$") |
+  \   exe "normal g`\"" |
+  \ endif
 
 let netrwhistpath="/Users/shreve/dotfiles/vim/.netrwhist"
 au VimLeave * if filereadable(netrwhistpath) | call delete(netrwhistpath) | endif
@@ -109,7 +109,7 @@ noremap <Up> :echoe "Use k"<CR>
 noremap <Down> :echoe "Use j"<CR>
 
 " jump between tags more easily
-map <C-[> <C-t>
+" map <C-[> <C-t>
 
 " allow saving as sudo
 " http://stackoverflow.com/a/7078429/1893290
@@ -125,50 +125,51 @@ command! Vimrc :e ~/.vimrc
 " If the current buffer has never been saved, it will have no name,
 " call the file browser to save it, otherwise just save it.
 command! -nargs=0 -bar Update if &modified
-	\|    if empty(bufname('%'))
-	\|        browse confirm write
-	\|    else
-	\|        confirm write
-	\|    endif
-	\|endif
+      \|    if empty(bufname('%'))
+      \|        browse confirm write
+      \|    else
+      \|        confirm write
+      \|    endif
+      \|endif
 nnoremap <silent> <C-S> :<C-u>Update<CR>
 
 " Set tabstop, softtabstop and shiftwidth to the same value
 command! -nargs=* Stab call Stab()
 function! Stab()
-	let l:tabstop = 1 * input('set tabstop = softtabstop = shiftwidth = ')
-	if l:tabstop > 0
-		let &l:sts = l:tabstop
-		let &l:ts = l:tabstop
-		let &l:sw = l:tabstop
-	endif
-	call SummarizeTabs()
+  let l:tabstop = 1 * input('set tabstop = softtabstop = shiftwidth = ')
+  if l:tabstop > 0
+    let &l:sts = l:tabstop
+    let &l:ts = l:tabstop
+    let &l:sw = l:tabstop
+  endif
+  call SummarizeTabs()
 endfunction
 
 function! SummarizeTabs()
-	try
-		echohl ModeMsg
-		echon 'tabstop='.&l:ts
-		echon ' shiftwidth='.&l:sw
-		echon ' softtabstop='.&l:sts
-		if &l:et
-			echon ' expandtab'
-		else
-			echon ' noexpandtab'
-		endif
-	finally
-		echohl None
-	endtry
+  try
+    echohl ModeMsg
+    echon 'tabstop='.&l:ts
+    echon ' shiftwidth='.&l:sw
+    echon ' softtabstop='.&l:sts
+    if &l:et
+      echon ' expandtab'
+    else
+      echon ' noexpandtab'
+    endif
+  finally
+    echohl None
+  endtry
 endfunction
 
 function! TrimWhiteSpace()
-	normal ms
-	%s/\s\+$//e
-	normal `s
+  normal ms
+  %s/\s\+$//e
+  %s/$//e
+  normal `s
 endfunction
 
 function! Copy()
-	normal '<,'>w !tee | pbcopy
+  normal '<,'>w ! pbcopy
 endfunction
 
 function! BufferOrProjectDirectory()
