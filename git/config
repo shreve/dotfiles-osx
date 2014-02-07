@@ -17,14 +17,15 @@
   quotepath = false
   editor = vim
   excludesfile = ~/.gitignore
+  mergetool = vim
 [diff]
   tool = /Applications/Xcode.app/Contents/Applications/FileMerge.app
 [help]
-  autocorrect = 1          # run the typo suggestion command if there is only one
+  autocorrect = 1
 [init]
   templatedir = ~/dotfiles/git/template
 [merge]
-  tool = diffmerge
+  tool = vim
 [push]
   default = upstream
 [user]
