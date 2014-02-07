@@ -139,21 +139,21 @@ alias gc="garbage-collect"
 alias ignore-changes="git update-index --assume-unchanged"              # assume file will never change
 alias consider-changes="git update-index --assume-no-unchanged"         # assume file can change
 revert-file() {                                                         # revert a single file, or all your changes.
-if [ -n "$1" ]; then
-  echo "Reverting file or folder: $1"
-  git checkout HEAD -- $1
-  git reset -- $1
-else
-  echo "No file selected. Revert all changes?"
-  read answer
-  if [[ "${answer}" =~ "y" ]]; then
-    echo "Reverting whole git directory"
-    git reset
-    git checkout HEAD
+  if [ -n "$1" ]; then
+    echo "Reverting file or folder: $1"
+    git checkout HEAD -- $1
+    git reset -- $1
   else
-    echo "Not reverting anything. Stay cool, bro. (!! to try again)"
+    echo "No file selected. Revert all changes?"
+    read answer
+    if [[ "${answer}" =~ "y" ]]; then
+      echo "Reverting whole git directory"
+      git reset
+      git checkout HEAD
+    else
+      echo "Not reverting anything. Stay cool, bro. (!! to try again)"
+    fi
   fi
-fi
 }
 
 garbage-collect() {                                                     # delete files, and let git do GC magic
@@ -174,13 +174,13 @@ garbage-collect() {                                                     # delete
 }
 
 add-new() {
-git status --porcelain | grep ? | awk '{print $2}' | xargs git add
+  git status --porcelain | grep ? | awk '{print $2}' | xargs git add
 }
 
 stage-all() {      # stage all my changes to be commited
-garbage-collect
-git add .
-git status
+  garbage-collect
+  git add .
+  git status
 }
 
 #/////////////////////////////
