@@ -8,28 +8,21 @@
 
 console.log('~/.js/pivotaltracker.com.js loaded');
 
-var $editors = [],
+var editors = [],
     editorSearch,
-    bindEditors,
-    log;
-
-log = function() {
-  console.log('pivotaltracker.com.js', arguments);
-}
+    bindEditors;
 
 editorSearch = setInterval(function() {
-  if($editors.length == 0) {
-    $editors = $('textarea.editor')
-    log("checking");
+  if(editors.length == 0) {
+    editors = $('textarea.editor')
   } else {
     bindEditors();
     clearInterval(editorSearch);
-    log("found editors");
   }
 }, 1000);
 
 bindEditors = function() {
-  $editors.bind('keypress', function(e) {
+  editors.bind('keypress', function(e) {
     if(e.metaKey && (e.keyCode || e.which) == 13) {
       id = this.id.replace('text', 'button')
       add = $('#'+id);
