@@ -71,3 +71,25 @@ class String
   end
 end
 
+def rec_req(*names)
+  names.each do |name|
+    unless is_a_dumb_file?(name)
+      pwd = File.absolute_path('.')
+      dir = File.join(pwd, name)
+      if File.directory?(dir)
+        Dir.entries(dir).each do |file|
+          file = File.join(name, file)
+          rec_req(file)
+        end
+      elsif File.file?(dir)
+        require dir
+      end
+    end
+  end
+end
+alias :rr :rec_req
+
+def is_a_dumb_file? name
+  name = File.basename(name)
+  %w(.DS_Store . ..).include?(name)
+end
