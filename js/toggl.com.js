@@ -10,7 +10,7 @@
  * but I don't have a solution for my password :/
  */
 
-if (window.location.host != "new.toggl.com") {
+if (window.location.host == "www.toggl.com") {
   window.location = "https://new.toggl.com";
 }
 
@@ -21,11 +21,12 @@ String.prototype.reverse = function() {
 $(document).ready(function() {
   setTimeout(function() {
     if ($('#logoutId').is(':visible')) {
-      $('#logoutId a').click();
+      window.location = $('#logoutId a').attr('href');
     } else {
       $('button.login').click();
       var email = 'yl.everhs@bocaj'; // you can never be too careful
       $('#login_email').val(email.reverse());
+      $('#remember_me').click();
       $('#login_password').focus();
     }
   }, 1000);
