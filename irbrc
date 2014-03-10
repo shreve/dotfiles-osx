@@ -10,7 +10,7 @@ def loadext
     rubygems
     fileutils
     ostruct
-    ap
+    awesome_print
   ]
 
   loaded_reqs = []
@@ -57,7 +57,11 @@ class Object
   end
 
   def inspect
-    ap self
+    begin
+      ap self
+    rescue
+      super
+    end
   end
 end
 
