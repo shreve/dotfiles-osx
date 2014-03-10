@@ -5,6 +5,7 @@
   cl = "!hub clone"
   ctags = "!.git/hooks/ctags"
   st = status -sb
+  lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%C(bold blue)<%an>%Creset' --abbrev-commit
 [color]
   branch = auto
   diff = auto
@@ -14,12 +15,12 @@
 [commit]
   template = ~/.gitmessage
 [core]
-  quotepath = false
+	quotepath = false
   editor = vim
   excludesfile = ~/.gitignore
   mergetool = vim
 [diff]
-  tool = /Applications/Xcode.app/Contents/Applications/FileMerge.app
+  tool = FileMerge
 [help]
   autocorrect = 1
 [init]
@@ -35,3 +36,5 @@
   insteadOf = heroku:     # $ git remote add heroku:my-app.git
 [url "git@github.com:"]
   insteadOf = github:     # $ git remote add github:my-repo.git
+[difftool "FileMerge"]
+  path = /Applications/Xcode.app/Contents/Applications/FileMerge.app

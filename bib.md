@@ -13,3 +13,5 @@ http://natelandau.com/my-mac-osx-bash_profile/
 **Drew Neil** (@nelstrom)
 https://github.com/nelstrom/dotfiles
 
+**Fred K Schott** (@fredkschott)
+http://fredkschott.com/post/2014/02/git-log-is-so-2005/
